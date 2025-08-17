@@ -10,10 +10,7 @@
       },
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
-      "position": [
-        -16,
-        -400
-      ],
+      "position": [-16, -400],
       "id": "92e2bdca-2f64-47b4-9d49-c71f521223e1",
       "name": "Webhook",
       "webhookId": "9025ea7b-7f61-423e-b9b2-6ecf21681c0b",
@@ -35,10 +32,7 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [
-        432,
-        -400
-      ],
+      "position": [432, -400],
       "id": "11c177c6-32ec-4507-9c1a-2565457804b1",
       "name": "jdText"
     },
@@ -51,7 +45,7 @@
           "parameters": [
             {
               "name": "X-goog-api-key",
-              "value": "AIzaSyB8vAKlNwaOOkQMJdBTrH3GTwvWwTgya8U"
+              "value": ""
             }
           ]
         },
@@ -62,10 +56,7 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        656,
-        -400
-      ],
+      "position": [656, -400],
       "id": "c0dda741-e91e-4d36-a6cd-0aeda632248e",
       "name": "HTTP Request"
     },
@@ -78,7 +69,7 @@
           "parameters": [
             {
               "name": "X-goog-api-key",
-              "value": "AIzaSyB8vAKlNwaOOkQMJdBTrH3GTwvWwTgya8U"
+              "value": ""
             }
           ]
         },
@@ -89,10 +80,7 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        880,
-        -400
-      ],
+      "position": [880, -400],
       "id": "840efdd5-e6ae-46fd-b341-b0308d28f9f8",
       "name": "HTTP Request1"
     },
@@ -102,10 +90,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        1104,
-        -400
-      ],
+      "position": [1104, -400],
       "id": "9f97b4c2-bf81-48d7-82c2-da61f114b101",
       "name": "Code"
     },
@@ -115,10 +100,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        1328,
-        -400
-      ],
+      "position": [1328, -400],
       "id": "bfac0f04-4896-4724-9464-90b5f740bcbb",
       "name": "Code1"
     },
@@ -131,7 +113,7 @@
           "parameters": [
             {
               "name": "X-goog-api-key",
-              "value": "AIzaSyB8vAKlNwaOOkQMJdBTrH3GTwvWwTgya8U"
+              "value": ""
             }
           ]
         },
@@ -142,10 +124,7 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        1552,
-        -400
-      ],
+      "position": [1552, -400],
       "id": "104f093b-41a3-457b-a70d-d78d8da87a98",
       "name": "HTTP Request2"
     },
@@ -155,10 +134,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        1776,
-        -400
-      ],
+      "position": [1776, -400],
       "id": "eda4f530-70e7-46e7-b467-2d3eadf8ea06",
       "name": "Code2"
     },
@@ -185,10 +161,7 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [
-        208,
-        -400
-      ],
+      "position": [208, -400],
       "id": "5ec66ae2-c81c-457d-8df7-2e2ed111384b",
       "name": "resumeText"
     }
