@@ -1,6 +1,6 @@
 # ElevateCV: AI-Powered Resume Optimization Agent
 
-![Project Banner](./image%20copy%205.png)
+<img src="./image%20copy%205.png" alt="Project Banner" width="600"/>
 
 **ElevateCV** is an advanced, multi-stage AI agent designed to automate the process of tailoring a candidate's resume to a specific job description. By leveraging a modular, first-principles approach, this agent deconstructs the complex task of resume customization into a series of discrete, auditable steps. The result is a highly effective, ATS-compliant document that significantly improves a candidate's visibility and alignment with their target role.
 
@@ -49,14 +49,14 @@ The agent's architecture was designed and visualized in Excalidraw before implem
 
 The system comprises three primary components: the **Candidate** (end-user), the **n8n Workflow** (orchestration engine), and the **LLM API** (intelligence layer). The n8n workflow acts as the central nervous system, managing the flow of data and coordinating tasks between the user and the AI model.
 
-![High-Level Component Diagram](./image.png)
-![High-Level Component Diagram](./image%20copy.png)
+<img src="./image.png" alt="High-Level Component Diagram" width="500"/>
+<img src="./image%20copy.png" alt="High-Level Component Diagram Variant" width="500"/>
 
 ### Detailed Sequence Diagram
 
 This diagram illustrates the precise interactions and data flow between the components over time. It details the validation checks, the multi-call LLM strategy, and the final assembly process, providing a clear, step-by-step view of the agent's operation.
 
-![Detailed Sequence Diagram](./image%20copy%204.png)
+<img src="./image%20copy%204.png" alt="Detailed Sequence Diagram" width="500"/>
 
 ---
 
@@ -72,13 +72,13 @@ This diagram illustrates the precise interactions and data flow between the comp
 
 This flowchart served as the final blueprint for the n8n implementation. It breaks down the entire process from the initial Webhook trigger to the final response, including the critical looping logic for rewriting bullet points.
 
-![Detailed Workflow Plan](./image%20copy%202.png)
+<img src="./image%20copy%202.png" alt="Detailed Workflow Plan" width="500"/>
 
 ### Live Workflow Canvas
 
 The following is a screenshot of the final, implemented workflow in the n8n canvas. Each node represents a specific task outlined in the workflow plan, demonstrating the direct translation of design to execution.
 
-![n8n Workflow Canvas](./image%20copy%202.png)
+<img src="./image%20copy%202.png" alt="Detailed Workflow Plan" width="500"/>
 
 ---
 
