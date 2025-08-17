@@ -1,0 +1,297 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "9025ea7b-7f61-423e-b9b2-6ecf21681c0b",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -16,
+        -400
+      ],
+      "id": "92e2bdca-2f64-47b4-9d49-c71f521223e1",
+      "name": "Webhook",
+      "webhookId": "9025ea7b-7f61-423e-b9b2-6ecf21681c0b",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0f9cfe9d-08b8-4dd8-9ad7-52785a7f3140",
+              "name": "jdText",
+              "value": "={{ $('Webhook').item.json.query[\"amp;jd\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        -400
+      ],
+      "id": "11c177c6-32ec-4507-9c1a-2565457804b1",
+      "name": "jdText"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-goog-api-key",
+              "value": "AIzaSyB8vAKlNwaOOkQMJdBTrH3GTwvWwTgya8U"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"You are an expert HR analyst and a specialist in talent acquisition data systems. Your task is to perform a systematic information extraction from a job description. Analyze the following Job Description. Your sole function is to extract the key hard skills, soft skills, and key responsibilities. Your output MUST be a single, valid JSON object with no explanatory text. The JSON object must have the following keys: \\\"hard_skills\\\", \\\"soft_skills\\\", and \\\"key_responsibilities\\\". Job Description: {{ $json.jdText }}\"\n        }\n      ]\n    }\n  ],\n  \"generationConfig\": {\n    \"response_mime_type\": \"application/json\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        656,
+        -400
+      ],
+      "id": "c0dda741-e91e-4d36-a6cd-0aeda632248e",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-goog-api-key",
+              "value": "AIzaSyB8vAKlNwaOOkQMJdBTrH3GTwvWwTgya8U"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"You are a meticulous, high-precision data parsing engine. Your purpose is to convert unstructured resume text into a structured JSON format. Parse the following resume text into a single, valid JSON object with no extraneous text. The root keys of the object must be exactly: 'contact_info' (an object with keys like 'name', 'email', 'phone'), 'summary' (a string), 'skills' (an array of strings), and 'work_experience'. The 'work_experience' value MUST be an array of objects. Each object in this array must have the following keys: 'job_title' (string), 'company' (string), 'dates' (string), and 'bullet_points' (an array of strings). Resume Text: {{ $node[\"resumeText\"].json.resumeText }}\"\n        }\n      ]\n    }\n  ],\n  \"generationConfig\": {\n    \"response_mime_type\": \"application/json\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        -400
+      ],
+      "id": "840efdd5-e6ae-46fd-b341-b0308d28f9f8",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all the data from the previous node\nconst items = $input.all();\n\n// Navigate to the nested text string that contains our resume\nconst jsonString = items[0].json.candidates[0].content.parts[0].text;\n\n// Parse that string into a real JSON object\nconst parsedData = JSON.parse(jsonString);\n\n// Replace the old, messy data with our new, clean data\nitems[0].json = parsedData;\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        -400
+      ],
+      "id": "9f97b4c2-bf81-48d7-82c2-da61f114b101",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the array of work experiences from the previous step\nconst workExperiences = $input.first().json.work_experience;\n\n// Get the JD keywords from the first HTTP Request node's output\n// IMPORTANT: Change \"HTTP Request\" below to the exact name of your JD extractor node\nconst jdKeywords = $node[\"HTTP Request\"].json;\n\n// Create a new array that will hold our combined items\nconst newItems = [];\n\n// Loop through each work experience and create a new item\n// that contains BOTH the job and the JD keywords\nfor (const experience of workExperiences) {\n  newItems.push({ \n    json: {\n      job_experience: experience,\n      jd_keywords: jdKeywords\n    } \n  });\n}\n\n// Return the new items for the loop\nreturn newItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        -400
+      ],
+      "id": "bfac0f04-4896-4724-9464-90b5f740bcbb",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-goog-api-key",
+              "value": "AIzaSyB8vAKlNwaOOkQMJdBTrH3GTwvWwTgya8U"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"You are an expert career coach... (rest of the prompt instructions)\\n\\n---\\nJD_CONTEXT:\\n{{ $json.jd_keywords }}\\n\\nORIGINAL_BULLETS:\\n{{ $json.job_experience.bullet_points }}\\n---\"\n        }\n      ]\n    }\n  ],\n  \"generationConfig\": {\n    \"response_mime_type\": \"application/json\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1552,
+        -400
+      ],
+      "id": "104f093b-41a3-457b-a70d-d78d8da87a98",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the original parsed resume from the node that cleaned it up\n\n// IMPORTANT: Change \"Code\" to the name of the node that parsed your resume\n\nconst originalResume = $node[\"Code\"].json;\n\n\n\n// Get the array of results from all the loop iterations\n\nconst rewrittenItems = $input.all();\n\n\n\nlet finalResume = \"\";\n\n\n\n// --- BUILD THE TEXT ---\n\n\n\n// 1. Contact Info\n\nfinalResume += `${originalResume.contact_info.name.toUpperCase()}\\n`;\n\nfinalResume += `${originalResume.contact_info.email} | ${originalResume.contact_info.phone} | ${originalResume.contact_info.linkedin}\\n\\n`;\n\n\n\n// 2. Skills\n\nfinalResume += `SKILLS\\n`;\n\nfinalResume += `${originalResume.skills.join(' | ')}\\n\\n`;\n\n\n\n// 3. Work Experience with NEW rewritten bullet points\n\nfinalResume += `WORK EXPERIENCE\\n`;\n\nfor (let i = 0; i < rewrittenItems.length; i++) {\n\n  const originalJob = originalResume.work_experience[i];\n\n  const rewrittenData = rewrittenItems[i].json;\n\n  let bulletPoints = [];\n\n\n\n  try {\n\n    const rewrittenBPsString = rewrittenData.candidates[0].content.parts[0].text;\n\n    const parsedBPs = JSON.parse(rewrittenBPsString);\n\n\n\n    if (Array.isArray(parsedBPs)) {\n\n        if (typeof parsedBPs[0] === 'string') {\n\n            bulletPoints = parsedBPs; // Handles simple arrays of strings\n\n        } else if (typeof parsedBPs[0] === 'object' && parsedBPs[0].hasOwnProperty('revised')) {\n\n            bulletPoints = parsedBPs.map(bp => bp.revised); // Handles arrays of objects\n\n        }\n\n    }\n\n  } catch (e) {\n\n    // If anything goes wrong, use the original bullets as a fallback\n\n    bulletPoints = originalJob.bullet_points;\n\n  }\n\n\n\n  finalResume += `\\n${originalJob.job_title.toUpperCase()} | ${originalJob.company}\\n`;\n\n  finalResume += `${originalJob.dates}\\n`;\n\n  for (const bullet of bulletPoints) {\n\n    finalResume += `* ${bullet}\\n`;\n\n  }\n\n}\n\n\n\n// --- FINAL OUTPUT ---\n\nreturn [{ json: { updatedSections: finalResume } }];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1776,
+        -400
+      ],
+      "id": "eda4f530-70e7-46e7-b467-2d3eadf8ea06",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a975cdd2-0e60-4d4e-9f19-d80679dcc82a",
+              "name": "resumeText",
+              "value": "={{ $json.query.resume }}",
+              "type": "string"
+            },
+            {
+              "id": "59e403c1-f434-4e08-ad95-ed3b44aceecf",
+              "name": "jdText",
+              "value": "={{ $json.query[\"amp;jd\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": "={{ false }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        -400
+      ],
+      "id": "5ec66ae2-c81c-457d-8df7-2e2ed111384b",
+      "name": "resumeText"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "resumeText",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "jdText": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "resumeText": {
+      "main": [
+        [
+          {
+            "node": "jdText",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "cf114089-08ea-4034-9e68-b2d8f73ba1c1",
+  "meta": {
+    "instanceId": "2e37a092f485bee3b8845ef10bb3f546b4cd03078d6c4291e80ef2ee93d2f41e"
+  },
+  "id": "3548cWyNmX7e0Iho",
+  "tags": []
+}
