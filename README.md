@@ -78,7 +78,7 @@ This flowchart served as the final blueprint for the n8n implementation. It brea
 
 The following is a screenshot of the final, implemented workflow in the n8n canvas. Each node represents a specific task outlined in the workflow plan, demonstrating the direct translation of design to execution.
 
-<img src="./Screenshot%202025-08-18%20at%2012.18.03%20AM.png" alt="Detailed Workflow Plan" width="500"/>
+<img src="./live.png" alt="Detailed Workflow Plan" width="500"/>
 
 ---
 
