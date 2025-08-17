@@ -1,6 +1,6 @@
 # ElevateCV: AI-Powered Resume Optimization Agent
 
-![Project Banner](https://i.imgur.com/your-banner-image.png)
+![Project Banner](image copy 5.png)
 
 **ElevateCV** is an advanced, multi-stage AI agent designed to automate the process of tailoring a candidate's resume to a specific job description. By leveraging a modular, first-principles approach, this agent deconstructs the complex task of resume customization into a series of discrete, auditable steps. The result is a highly effective, ATS-compliant document that significantly improves a candidate's visibility and alignment with their target role.
 
